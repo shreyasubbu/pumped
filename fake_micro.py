@@ -40,6 +40,6 @@ for i in range(len(vol)):
 
 
 df['total_milk_vol'] = np.array(total_vol_arr)
-print(df.tail())
+print(df)
 
 
