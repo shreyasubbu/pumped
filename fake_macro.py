@@ -91,5 +91,5 @@ for sessions in range(len(df.index)):
         df.loc[sessions, 'milk_vol'] = df.loc[sessions, 'milk_vol'] + time_vol_noise
 
 print(df)
-#df.to_excel(excel_writer='sample_data.xlsx', sheet_name='sheet1',index_label=False)
+df.to_excel(excel_writer='sample_data.xlsx', sheet_name='sheet1',index_label=False)
 
