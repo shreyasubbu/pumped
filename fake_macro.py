@@ -51,7 +51,7 @@ df['date'] = pd.to_datetime(df['date'])
 for sessions in range(len(df.index)):
     df.loc[sessions,'session_length'] = np.random.uniform(15, 40)
     df.loc[sessions,'pump_power'] = np.random.random_integers(1, 12)
-    df.loc[sessions,'let_down_time'] = np.random.uniform(2, 10)
+    df.loc[sessions,'let_down_time'] = 10 + np.random.normal(0, 3)
     df.loc[sessions, 'time_of_day'] = time_of_day(df.loc[sessions, 'date'].hour)
 
     # First pump session should have interval of 0
