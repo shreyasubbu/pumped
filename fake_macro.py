@@ -29,7 +29,7 @@ def time_of_day(hour):
     return time_index
 
 #best time of day
-best_time = np.random.random_integers(0,3)
+best_time = np.random.random_integers(1,3)
 
 # creating dataframe with daterange
 start_date = datetime.datetime(2020, 1, 1, 6)
@@ -42,8 +42,6 @@ for i in range(2,16):
     new_df = pd.DataFrame(new_dates, columns=['date'])
     df_array = [df, new_df]
     df = pd.concat(df_array, ignore_index=True)
-
-print(df)
 
 df['date'] = pd.to_datetime(df['date'])
 
@@ -71,23 +69,23 @@ for sessions in range(len(df.index)):
     df.loc[sessions, 'milk_vol'] = df.loc[sessions,'session_length'] + (np.random.normal(0, 4) * session_length_corr)
 
     #added volume based on pump power
-    power_vol = (df.loc[sessions,'pump_power'] * pump_power_corr) / 100
-    power_noise_vol = power_vol + np.random.normal(0, power_vol/5)
+    power_vol = (df.loc[sessions,'pump_power'] * pump_power_corr)
+    power_noise_vol = power_vol + np.random.normal(0, 0.5)
     df.loc[sessions, 'milk_vol'] = df.loc[sessions, 'milk_vol'] + power_noise_vol
 
     #Add volume based on pumping frequency, randomly pick ideal num of sessions and base volume on that
     if df.loc[sessions, 'num_sessions'] <= ideal_sessions:
-        freq_vol = (frequency_corr/8)
-        freq_vol_noise = freq_vol + np.random.normal(0, freq_vol/5)
+        freq_vol = frequency_corr * 5
+        freq_vol_noise = freq_vol + abs(np.random.normal(0, 0.5))
         df.loc[sessions, 'milk_vol'] = df.loc[sessions, 'milk_vol'] + freq_vol_noise
-    else:
-        freq_vol = (frequency_corr / 20)
-        freq_vol_noise = freq_vol + np.random.normal(0, freq_vol)
-        df.loc[sessions, 'milk_vol'] = df.loc[sessions, 'milk_vol'] + freq_vol_noise
+    '''else:
+        freq_vol = (frequency_corr / 10)
+        freq_vol_noise = freq_vol + np.random.normal(0, freq_vol/10)
+        df.loc[sessions, 'milk_vol'] = df.loc[sessions, 'milk_vol'] + freq_vol_noise'''
 
     #Add volume based on best time of day
-    if df.loc[sessions, 'time_of_day'] is best_time:
-        time_vol_noise = (time_corr * 0.5) + (np.random.normal(0, 0.1) * time_corr)
+    if df.loc[sessions, 'time_of_day'] == best_time:
+        time_vol_noise = abs((np.random.normal(3, 0.1))) * time_corr * 2
         df.loc[sessions, 'milk_vol'] = df.loc[sessions, 'milk_vol'] + time_vol_noise
 
 print(df)
