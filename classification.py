@@ -22,14 +22,11 @@ class_ = [1, 2, 3]
 
 for session in range(len(df.index)):
     if df.loc[session, 'milk_rate'] <= classes[1]:
-        df['label'] = class_[0]
-        print('0')
+        df.loc[session, 'label'] = class_[0]
     elif df.loc[session, 'milk_rate'] > classes[1] and df.loc[session, 'milk_rate'] <= classes[2]:
-        df['label'] = class_[1]
-        print('1')
+        df.loc[session, 'label'] = class_[1]
     else:
-        df['label'] = class_[2]
-        print('2')
+        df.loc[session, 'label'] = class_[2]
 
 X = np.array(df.drop(['milk_rate', 'label'], axis = 1))
 X = preprocessing.scale(X)
@@ -37,7 +34,7 @@ y = np.array(df['label'])
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-clf = KNeighborsClassifier(n_neighbors=5)
+clf = KNeighborsClassifier(n_neighbors=9)
 clf.fit(X_train, y_train)
 
 y_pred = clf.predict(X_test)

@@ -8,7 +8,7 @@ pd.set_option('display.max_rows', 50)
 #Pull in volume data from excel sheet, and create frame for anomaly data
 df = pd.read_excel('sample_data.xlsx', header=0, index_col=0)
 anomalies = pd.DataFrame()
-anomalies['anomaly'] = ""
+#anomalies['anomaly'] = np.array()
 letdown_avg = df.loc[0, 'let_down_time']
 
 #Go through each session
@@ -20,9 +20,9 @@ for session in range(len(df.index)):
     df.loc[session, 'sma_output'] = vol_per_min
 
     #If current sessions volume/time is 75% less than the previous average, flag as anomaly
-    if(session > 8 and vol_per_min < 0.6*df.loc[session - 1, 'sma_output']):
+    if(session > 8 and vol_per_min < 0.7*df.loc[session - 1, 'sma_output']):
         anomalies = anomalies.append(df.loc[session, :])
-        anomalies.loc[session, 'anomaly'] = "low production"
+        anomalies.loc[session, 'anomaly'] = np.array(["low production"])
         prod_flag = True
 
 
@@ -33,10 +33,10 @@ for session in range(len(df.index)):
     #If letdown time much larger than average, flag as anomaly
     if df.loc[session, 'let_down_time'] > 1.75*letdown_avg:
         if prod_flag:
-            anomalies.loc[session, 'anomaly'] = "low production, long letdown"
+            np.append(anomalies.loc[session, 'anomaly'], "long letdown")
         else:
             anomalies = anomalies.append(df.loc[session, :])
-            anomalies.loc[session, 'anomaly'] = "long letdown"
+            anomalies.loc[session, 'anomaly'] = np.array(["long letdown"])
 
     #Calculate new letdown average
     letdown_avg = letdown_avg + ((df.loc[session, 'let_down_time'] - letdown_avg) / (session+1))
