@@ -10,7 +10,7 @@ default_app = initialize_app(cred)
 db = firestore.client()
 
 # Create a reference to the cities collection
-user_doc_id = 'users/emily'
+user_doc_id = 'users/emma'
 user_doc_ref = db.document(user_doc_id)
 
 def getDataFromDay(date):
@@ -35,8 +35,21 @@ def writeAnomalyToSession(session, anomaly_updates):
     sessionDoc.update(anomaly_updates)
 
 def date_to_timestamp(entry_date):
-    day_str = str(entry_date.month) + '-' + str(entry_date.day) + '-' + str(entry_date.year)
-    time_str = str(entry_date.hour) + '-' + str(entry_date.minute)
+
+    day = str(entry_date.day)
+    if (entry_date.day < 10):
+        day = '0' + day
+
+    month = str(entry_date.month)
+    if (entry_date.month < 10):
+        month = '0' + month
+
+    hour = str(entry_date.hour)
+    if (entry_date.hour < 10):
+        hour = '0' + hour
+
+    day_str = month + '-' + day + '-' + str(entry_date.year)
+    time_str =  hour + '-' + str(entry_date.minute)
 
     timestamp_str = day_str + '/' + time_str
 
@@ -73,15 +86,7 @@ def dataToJSON(data, entry):
 
     return session_dict
 
-date = '2-4-2020'
-sessionDict = getDataFromDay(date)
-#print(sessionDict)
-df = pd.DataFrame.from_dict(sessionDict)
-#print(df)
 
-anomaly_updates = {
-    'anomaly': ['low production', "long letdown"]
-}
 #writeAnomalyToSession(user_doc_id + '/2-4-2020/19-44', anomaly_updates)
 
 # Pull in volume data from excel sheet
