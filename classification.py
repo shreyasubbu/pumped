@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 pd.set_option('display.max_rows', 150)
 
-df = pd.read_excel('sample_data.xlsx', header=0, index_col=0)
+df = pd.read_excel('sample_data_2.xlsx', header=0, index_col=0)
 df = df[['session_length', 'pump_power', 'time_of_day', 'num_sessions', 'milk_vol']]
 df['milk_rate'] = df['milk_vol'] / df['session_length']
 #df = df.drop(['milk_vol', 'session_length'], axis=1)
@@ -33,7 +33,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.scatter(df['time_of_day'], df['pump_power'], df['num_sessions'], c = df['label'])
 
-'''X = np.array(df['session_length']).reshape(-1,1)
+X = np.array(df[['pump_power', 'time_of_day', 'num_sessions']])
 X = preprocessing.scale(X)
 y = np.array(df['label'])
 
@@ -44,10 +44,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 clf = KNeighborsClassifier(n_neighbors=4)
 clf.fit(X_train, y_train)
 
-y_pred = clf.predict(X_test)'''
+y_pred = clf.predict(X_test)
 
 plt.grid()
 plt.show()
 
 
-#print(metrics.accuracy_score(y_test, y_pred))
+print(metrics.accuracy_score(y_test, y_pred))
