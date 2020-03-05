@@ -15,26 +15,26 @@ df = df[['session_length', 'pump_power', 'time_of_day', 'num_sessions', 'milk_vo
 df['milk_rate'] = df['milk_vol'] / df['session_length']
 #df = df.drop(['milk_vol', 'session_length'], axis=1)
 
-min_vol = min(df['milk_vol'])
-max_vol = max(df['milk_vol'])
+min_vol = min(df['milk_rate'])
+max_vol = max(df['milk_rate'])
 
 classes = np.linspace(min_vol, max_vol, 4)
 class_ = [1, 2, 3]
 
 for session in range(len(df.index)):
-    if df.loc[session, 'milk_vol'] <= classes[1]:
+    if df.loc[session, 'milk_rate'] <= classes[1]:
         df.loc[session, 'label'] = class_[0]
-    elif df.loc[session, 'milk_vol'] > classes[1] and df.loc[session, 'milk_vol'] <= classes[2]:
+    elif df.loc[session, 'milk_rate'] > classes[1] and df.loc[session, 'milk_rate'] <= classes[2]:
         df.loc[session, 'label'] = class_[1]
     else:
         df.loc[session, 'label'] = class_[2]
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-ax.scatter(df['session_length'], df['milk_rate'],df['num_sessions'] , c = df['label'])
+ax.scatter(df['time_of_day'], df['pump_power'], df['num_sessions'], c = df['label'])
 
-X = np.array(df['session_length']).reshape(-1,1)
-#X = preprocessing.scale(X)
+'''X = np.array(df['session_length']).reshape(-1,1)
+X = preprocessing.scale(X)
 y = np.array(df['label'])
 
 
@@ -44,10 +44,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 clf = KNeighborsClassifier(n_neighbors=4)
 clf.fit(X_train, y_train)
 
-y_pred = clf.predict(X_test)
+y_pred = clf.predict(X_test)'''
 
 plt.grid()
 plt.show()
 
 
-print(metrics.accuracy_score(y_test, y_pred))
+#print(metrics.accuracy_score(y_test, y_pred))
