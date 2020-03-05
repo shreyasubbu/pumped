@@ -25,17 +25,20 @@ def getAllData():
     collections = user_doc_ref.collections()
 
     for collection in collections:
-        session_date = '{}'.format(collection.id)
-        docs = collection.stream()
+        try:
+            session_date = '{}'.format(collection.id)
+            docs = collection.stream()
 
-        for doc in docs:
-            session_time ='{}'.format(doc.id)
-            timestamp = session_date + " " + session_time
-            temp_data = pd.DataFrame(doc.to_dict(), index=[0])
-            temp_data = temp_data.reindex(columns=columnTitles)
-            temp_data.insert(0, 'date', pd.to_datetime(timestamp))
+            for doc in docs:
+                session_time ='{}'.format(doc.id)
+                timestamp = session_date + " " + session_time
+                temp_data = pd.DataFrame(doc.to_dict(), index=[0])
+                temp_data = temp_data.reindex(columns=columnTitles)
+                temp_data.insert(0, 'date', pd.to_datetime(timestamp))
 
-            df = df.append(temp_data, ignore_index=True)
+                df = df.append(temp_data, ignore_index=True)
+        except:
+            print('anomaly session')
     return df
 
 #Detects anomalies within DataFrame, returns DataFrame containing anomalies
@@ -102,13 +105,14 @@ def dateToTimestamp(entry_date):
 
     return timestamp_str
 
+
 #Use anomaly DataFrame to send anomaly info to Firebase
 def sendAnomalies(sessionData):
     for entry in range(len(sessionData.index)):
-        timestamp = user_doc_id + '/' + dateToTimestamp(sessionData.loc[entry, 'date'])
+        timestamp = user_doc_id + '/anomalies/' + dateToTimestamp(sessionData.loc[entry, 'date']) + '/' + 'anomaly_' + str(entry + 1)
 
         sessionDoc = db.document(timestamp)
-        sessionDoc.update(anomalyToJSON(sessionData, entry))
+        sessionDoc.set(anomalyToJSON(sessionData, entry))
 
 
 
