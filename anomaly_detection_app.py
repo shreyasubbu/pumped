@@ -80,7 +80,7 @@ def detectAnomaly(df):
 
 #Turn a single anomaly value into a dict
 def anomalyToJSON(df, entry):
-    anomaly_dict = {'anomaly': df.loc[entry, 'anomaly']}
+    anomaly_dict = {dateToTimestamp2(df.loc[entry, 'date']):{'anomaly': df.loc[entry, 'anomaly']}}
     return anomaly_dict
 
 #Turn date into a timestamp string for Firebase
@@ -105,14 +105,36 @@ def dateToTimestamp(entry_date):
 
     return timestamp_str
 
+#Turn date into a timestamp string for Firebase
+def dateToTimestamp2(entry_date):
+
+    day = str(entry_date.day)
+    if (entry_date.day < 10):
+        day = '0' + day
+
+    month = str(entry_date.month)
+    if (entry_date.month < 10):
+        month = '0' + month
+
+    hour = str(entry_date.hour)
+    if (entry_date.hour < 10):
+        hour = '0' + hour
+
+    day_str = month + '-' + day + '-' + str(entry_date.year)
+    time_str =  hour + '-' + str(entry_date.minute)
+
+    timestamp_str = day_str + '-' + time_str
+
+    return timestamp_str
+
 
 #Use anomaly DataFrame to send anomaly info to Firebase
 def sendAnomalies(sessionData):
     for entry in range(len(sessionData.index)):
-        timestamp = user_doc_id + '/anomalies/' + dateToTimestamp(sessionData.loc[entry, 'date']) + '/' + 'anomaly_' + str(entry + 1)
+        timestamp = user_doc_id + '/personalization/anomalies'
 
         sessionDoc = db.document(timestamp)
-        sessionDoc.set(anomalyToJSON(sessionData, entry))
+        sessionDoc.update(anomalyToJSON(sessionData, entry))
 
 
 
