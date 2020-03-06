@@ -36,11 +36,11 @@ clf.fit(X_train, y_train)
 confidence = clf.score(X_test, y_test)
 
 y_pred = clf.predict(X_test)
-print("MAE: ", metrics.mean_absolute_error(y_test, y_pred))
+'''print("MAE: ", metrics.mean_absolute_error(y_test, y_pred))
 print("MSE: ", metrics.mean_squared_error(y_test, y_pred))
 print("r2 score: ", metrics.r2_score(y_test, y_pred))
 print("Confidence: ", confidence)
-print("Coefficients: ", clf.coef_)
+print("Coefficients: ", clf.coef_)'''
 
 pump_power = np.linspace(1,12,12)
 time_of_day = np.array([1,2,3])
@@ -59,7 +59,7 @@ result = np.where(y_pred == np.amax(y_pred))
 print("Best num sessions: ", test_df.loc[int(result[0]), 'num_sessions'])
 print("Best time of day: ", test_df.loc[int(result[0]), 'time_of_day'])
 
-#model = sm.OLS(y_train, X_train).fit()
-#predictions = model.predict(X_test)
+model = sm.OLS(y_train, X_train).fit()
+predictions = model.predict(X_test)
 
-#print(model.summary())
+print(model.summary())

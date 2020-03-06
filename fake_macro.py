@@ -92,7 +92,7 @@ for sessions in range(len(df.index)):
     df.loc[sessions, 'milk_vol'] = df.loc[sessions, 'milk_vol'] + volume_added
 
 print(df)
-#df.to_excel(excel_writer='sample_data_2.xlsx', sheet_name='sheet1',index_label=False)
+df.to_excel(excel_writer='sample_data_2.xlsx', sheet_name='sheet1',index_label=False)
 
 for x in df[['pump_power', 'time_of_day', 'session_length', 'num_sessions']]:
     plt.figure(x)
