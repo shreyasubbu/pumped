@@ -55,10 +55,9 @@ for power in pump_power:
 y_pred = clf.predict(test_df)
 y_pred = np.round(y_pred, 3)
 result = np.where(y_pred == np.amax(y_pred))
-print(result[0])
 
-print("Best num sessions: ", test_df.loc[result[0], 'num_sessions'])
-print("Best time of day: ", test_df.loc[result[0], 'time_of_day'])
+print("Best num sessions: ", test_df.loc[int(result[0]), 'num_sessions'])
+print("Best time of day: ", test_df.loc[int(result[0]), 'time_of_day'])
 
 #model = sm.OLS(y_train, X_train).fit()
 #predictions = model.predict(X_test)
