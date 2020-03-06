@@ -37,17 +37,15 @@ X = np.array(df[['pump_power', 'time_of_day', 'num_sessions']])
 X = preprocessing.scale(X)
 y = np.array(df['label'])
 
-
-
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-clf = KNeighborsClassifier(n_neighbors=4)
+clf = KNeighborsClassifier(n_neighbors=5)
 clf.fit(X_train, y_train)
 
 y_pred = clf.predict(X_test)
 
+print(metrics.accuracy_score(y_test, y_pred))
 plt.grid()
 plt.show()
 
 
-print(metrics.accuracy_score(y_test, y_pred))

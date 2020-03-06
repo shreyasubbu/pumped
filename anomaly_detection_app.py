@@ -132,10 +132,8 @@ def dateToTimestamp2(entry_date):
 def sendAnomalies(sessionData):
     for entry in range(len(sessionData.index)):
         timestamp = user_doc_id + '/personalization/anomalies'
-
         sessionDoc = db.document(timestamp)
         sessionDoc.update(anomalyToJSON(sessionData, entry))
-
 
 
 total_data = getAllData()
