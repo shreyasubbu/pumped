@@ -2,11 +2,10 @@ import numpy as np
 from sklearn import preprocessing
 import pandas as pd
 import matplotlib.pyplot as plt
-import pylab as pl
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
-from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d import axes3d
 
 pd.set_option('display.max_rows', 150)
 

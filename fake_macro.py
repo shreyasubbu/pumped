@@ -14,6 +14,7 @@ frequency_corr = 1
 
 #Randomly choosing ideal session length
 ideal_sessions = np.random.random_integers(3, 7)
+#ideal_sessions = 4
 
 #Identifying time of day
 time_in_day = ['early_morning', "morning", "afternoon", "night"]
@@ -31,6 +32,7 @@ def time_of_day(hour):
 
 #best time of day
 best_time = np.random.random_integers(1,3)
+#best_time = 2
 
 #Pump power setting
 power_range = np.arange(0, 0.5, 0.5/12)
@@ -40,7 +42,7 @@ start_date = datetime.datetime(2020, 1, 1, 6)
 date_rng = pd.date_range(start='1/1/2020 06:00:00', periods=8, freq='2H')
 df = pd.DataFrame(date_rng, columns=['date'])
 
-for i in range(2,100):
+for i in range(2,20):
     start_date = start_date + datetime.timedelta(days=1)
     new_dates = pd.date_range(start=start_date, periods=8, freq='2H')
     new_df = pd.DataFrame(new_dates, columns=['date'])
@@ -72,7 +74,7 @@ for sessions in range(len(df.index)):
 
     #Creating milk volume measurement as result of several factors
     #milk volume is initially based on session length
-    df.loc[sessions, 'milk_vol'] = df.loc[sessions,'session_length'] + (np.random.normal(0, df.loc[sessions,'session_length']/10) * session_length_corr)
+    df.loc[sessions, 'milk_vol'] = df.loc[sessions,'session_length'] + (np.random.normal(0, df.loc[sessions,'session_length']/20) * session_length_corr)
 
     #added volume based on pump power
     power_rate = power_range[int(df.loc[sessions,'pump_power']-1)] * pump_power_corr
@@ -92,11 +94,11 @@ for sessions in range(len(df.index)):
     df.loc[sessions, 'milk_vol'] = df.loc[sessions, 'milk_vol'] + volume_added
 
 print(df)
-df.to_excel(excel_writer='sample_data_2.xlsx', sheet_name='sheet1',index_label=False)
+df.to_excel(excel_writer='sample_data_4.xlsx', sheet_name='sheet1',index_label=False)
 
-for x in df[['pump_power', 'time_of_day', 'session_length', 'num_sessions']]:
+'''for x in df:
     plt.figure(x)
     plt.scatter(df[x], df['milk_vol'])
     plt.xlabel(x)
     plt.ylabel('milk volume (mL)')
-    plt.show()
+    plt.show()'''

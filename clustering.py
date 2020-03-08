@@ -4,7 +4,6 @@ from sklearn.decomposition import PCA
 from sklearn import preprocessing
 import pandas as pd
 import matplotlib.pyplot as plt
-import pylab as pl
 
 
 # ok so clustering with k-means didn't work out too great lol but thats ok we can come back to it??
